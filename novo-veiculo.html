@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cadastrar Novo Veículo</title>
+  <link rel="stylesheet" href="novo-veiculo.css" />
+</head>
+<body>
+
+  <div class="header">Cadastrar Novo Veículo</div>
+
+  <div class="content">
+    <form id="novo-veiculo-form">
+      <label for="placa">
+        Placa:
+        <input type="text" name="placa" id="placa" required />
+      </label>
+
+      <label for="tipo">
+        Tipo:
+        <input type="text" name="tipo" id="tipo" required />
+      </label>
+
+      <label for="proprietario">
+        Proprietário:
+        <input type="text" name="proprietario" id="proprietario" required />
+      </label>
+
+      <label for="modelo">
+        Modelo:
+        <input type="text" name="modelo" id="modelo" required />
+      </label>
+
+      <label for="marca">
+        Marca:
+        <input type="text" name="marca" id="marca" required />
+      </label>
+
+      <label for="cor">
+        Cor:
+        <input type="text" name="cor" id="cor" required />
+      </label>
+
+      <label for="ano">
+        Ano:
+        <input type="number" name="ano" id="ano" required min="1900" max="2099" />
+      </label>
+
+      <label for="telefone">
+        Telefone:
+        <input type="text" name="telefone" id="telefone" required pattern="\d{10,11}" title="Somente números, 10 ou 11 dígitos" />
+      </label>
+
+      <button type="submit">Cadastrar</button>
+    </form>
+  </div>
+
+  <script src="novo-veiculo.js"></script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Controle de Estacionamento</title>
+  <link rel="stylesheet" href="relatorio-estadias.css" />
+</head>
+<body>
+  <header>
+    <h1>Controle de Estacionamento</h1>
+  </header>
+
+  <main>
+    <!-- Botão abrir modal nova estadia -->
+    <button id="abrir-nova-estadia" class="btn-primary">Nova Estadia</button>
+
+    <!-- Veículos cadastrados -->
+    <section id="cadastrados-list" class="list-section">
+      <h2>Veículos Cadastrados</h2>
+      <div class="list-content"></div>
+    </section>
+
+    <!-- Estadias -->
+    <section id="estadias-list" class="list-section">
+      <h2>Estadias</h2>
+      <div class="list-content"></div>
+    </section>
+  </main>
+
+  <!-- Modal Nova Estadia -->
+  <div id="nova-estadia-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="nova-estadia-title">
+    <div class="modal-content">
+      <h3 id="nova-estadia-title">Cadastrar Nova Estadia</h3>
+      <form id="nova-estadia-form">
+        <label for="placa-select">Placa:</label>
+        <select name="placa" id="placa-select" required>
+          <option value="">Selecione uma placa</option>
+        </select>
+
+        <label for="entrada-input">Entrada:</label>
+        <input type="datetime-local" name="entrada" id="entrada-input" required />
+
+        <label for="valorHora-input">Valor Hora (R$):</label>
+        <input type="number" name="valorHora" id="valorHora-input" min="0.1" step="0.01" required />
+
+        <div class="modal-buttons">
+          <button type="submit" class="btn-primary">Cadastrar</button>
+          <button type="button" id="fechar-nova-estadia" class="btn-secondary">Fechar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Editar Estadia -->
+  <div id="edit-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="editar-estadia-title">
+    <div class="modal-content">
+      <h3 id="editar-estadia-title">Editar Estadia</h3>
+      <form id="edit-form">
+        <input type="hidden" name="id" />
+
+        <p>Placa: <strong id="placa-display"></strong></p>
+
+        <label for="edit-entrada">Entrada:</label>
+        <input type="datetime-local" name="edit-entrada" id="edit-entrada" required />
+
+        <label for="edit-saida">Saída:</label>
+        <input type="datetime-local" name="edit-saida" id="edit-saida" />
+
+        <label for="edit-valorHora">Valor Hora (R$):</label>
+        <input type="number" name="edit-valorHora" id="edit-valorHora" min="0.1" step="0.01" required />
+
+        <div class="modal-buttons">
+          <button type="submit" class="btn-primary">Salvar</button>
+          <button type="button" id="fechar-editar-estadia" class="btn-secondary">Fechar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Script -->
+  <script src="relatorio-estadias.js"></script>
+</body>
+</html>

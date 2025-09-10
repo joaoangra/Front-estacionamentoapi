@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Estacionamento ACME</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="title">Estacionamento ACME</div>
+    <div class="menu-icon" id="menu-icon" tabindex="0" aria-label="Menu">
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+    </div>
+    <nav class="dropdown-menu" id="dropdown-menu" aria-hidden="true">
+      <a href="/novo-veiculo.html" class="menu-item">Novo Veículo</a>
+      <a href="/editar-veiculos.html" class="menu-item">Editar Veículos</a>
+      <a href="/relatorio-estadias.html" class="menu-item">Relatório de Estadias</a>
+    </nav>
+  </header>
+
+  <main class="content">
+    <!-- Aqui fica o conteúdo da lista de veículos -->
+    <section id="vehicle-list" class="vehicle-list">
+      <!-- Cards dos veículos serão inseridos aqui -->
+    </section>
+
+    <section id="estadias-list" class="section-list">
+      <h2>Estadias </h2>
+      <div class="estadias-list"></div>
+    </section>
+  </main>
+
+
+
+  <!-- Scripts -->
+  <script src="script.js"></script>
+  <script src="relatorio-estadias.js"></script>
+</body>
+</html>

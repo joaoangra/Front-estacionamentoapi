@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Editar Veículos - Estacionamento ACME</title>
+  <link rel="stylesheet" href="editar-veiculos.css" />
+</head>
+<body>
+
+  <header class="header">
+    <div class="title">Estacionamento ACME - Editar Veículos</div>
+  </header>
+
+  <main class="content">
+    <h2>Editar Veículos</h2>
+    <p>Aqui você pode editar os veículos cadastrados.</p>
+    <section id="vehicle-list" class="vehicle-list">
+      <!-- Os cards de veículos serão inseridos aqui -->
+    </section>
+  </main>
+
+  <!-- Modal para edição de veículo -->
+  <div id="edit-modal" class="modal">
+    <div class="modal-content">
+      <h2>Editar Veículo</h2>
+      <form id="edit-form">
+        <input type="hidden" id="vehicle-id" />
+
+        <label for="placa">Placa:</label>
+        <input type="text" id="placa" name="placa" required disabled />
+
+        <label for="tipo">Tipo:</label>
+        <select id="tipo" name="tipo" required>
+          <option value="CARRO">Carro</option>
+          <option value="MOTO">Moto</option>
+        </select>
+
+        <label for="proprietario">Proprietário:</label>
+        <input type="text" id="proprietario" name="proprietario" required />
+
+        <label for="modelo">Modelo:</label>
+        <input type="text" id="modelo" name="modelo" required />
+
+        <label for="marca">Marca:</label>
+        <input type="text" id="marca" name="marca" required />
+
+        <label for="cor">Cor:</label>
+        <input type="text" id="cor" name="cor" required />
+
+        <label for="ano">Ano:</label>
+        <input type="number" id="ano" name="ano" required />
+
+        <label for="telefone">Telefone:</label>
+        <input type="text" id="telefone" name="telefone" required />
+
+        <div class="modal-actions">
+          <button type="submit">Salvar Alterações</button>
+          <button type="button" id="close-modal">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="editar-veiculos.js"></script>
+
+</body>
+</html>
