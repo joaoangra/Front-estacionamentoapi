@@ -2,6 +2,8 @@
 
 Este projeto é a interface web para gerenciar veículos e estadias de um estacionamento. Ele consome uma API RESTful hospedada no Vercel para realizar operações CRUD em veículos e estadias.
 
+- Feito por: Maria Luiza e João Angra
+
 ---
 
 ## Tecnologias Utilizadas
