@@ -88,16 +88,3 @@ Abra o arquivo `index.html` (ou equivalente) em seu navegador.
 - O cálculo do valor total da estadia é feito no frontend, multiplicando a diferença em horas pelo valor da hora.
 
 ---
-
-## Exemplo de requisição para cadastrar nova estadia
-
-POST https://estacionamento-joaoapii2025.vercel.app/estadias
-
-Content-Type: application/json
-
-{
-"placa": "ABC1234",
-"entrada": "2025-09-10T14:30:00.000Z",
-"valorHora": 10,
-"valorTotal": 0
-}
