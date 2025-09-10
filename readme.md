@@ -1,8 +1,8 @@
-# Sistema de Estacionamento - Frontend
+# Sistema de Estacionamento - Frontend - (Feito por: Maria Luiza e João Angra)
+
 
 Este projeto é a interface web para gerenciar veículos e estadias de um estacionamento. Ele consome uma API RESTful hospedada no Vercel para realizar operações CRUD em veículos e estadias.
 
-- Feito por: Maria Luiza e João Angra
 
 ---
 
