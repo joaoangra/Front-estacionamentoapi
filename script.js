@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const vehicleList = document.querySelector('.vehicle-list');
   const estadiasList = document.querySelector('.estadias-list');
 
-  // Função para abrir o menu dropdown
   const menuIcon = document.getElementById('menu-icon');
   const dropdownMenu = document.getElementById('dropdown-menu');
   
@@ -18,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Função para buscar os veículos da API
   async function fetchVehicles() {
     try {
       const response = await fetch('https://estacionamento-joaoapii2025.vercel.app/veiculos');
@@ -32,7 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Função para buscar as estadias da API
   async function fetchEstadias() {
     try {
       const response = await fetch('https://estacionamento-joaoapii2025.vercel.app/estadias');
@@ -46,7 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Função para criar o card de veículos
   function createVehicleCard(vehicle) {
     const card = document.createElement('section');
     card.className = 'vehicle-card';
@@ -73,16 +69,14 @@ document.addEventListener('DOMContentLoaded', () => {
     return card;
   }
 
-  // Função para renderizar os cards de veículos
   function renderVehicleCards(vehicles) {
-    vehicleList.innerHTML = ''; // limpa antes
+    vehicleList.innerHTML = '';
     vehicles.forEach(vehicle => {
       const card = createVehicleCard(vehicle);
       vehicleList.appendChild(card);
     });
   }
 
-  // Função para criar o card de estadias
   function createEstadiaCard(estadia) {
     const card = document.createElement('section');
     card.className = 'estadia-card';
@@ -109,16 +103,14 @@ document.addEventListener('DOMContentLoaded', () => {
     return card;
   }
 
-  // Função para renderizar os cards de estadias
   function renderEstadiasCards(estadias) {
-    estadiasList.innerHTML = ''; // limpa antes
+    estadiasList.innerHTML = '';
     estadias.forEach(estadia => {
       const card = createEstadiaCard(estadia);
       estadiasList.appendChild(card);
     });
   }
 
-  // Função para formatar a data
   function formatarData(dataString) {
     const data = new Date(dataString);
     if (isNaN(data)) return dataString;
@@ -132,7 +124,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return `${dia}/${mes}/${ano} ${hora}:${min}`;
   }
 
-  // Chamada inicial para buscar e renderizar os dados
   fetchVehicles();
   fetchEstadias();
 });

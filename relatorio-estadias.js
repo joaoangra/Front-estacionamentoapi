@@ -11,12 +11,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   const fecharEditarEstadia = document.getElementById('fechar-editar-estadia');
   const abrirNovaEstadiaBtn = document.getElementById('abrir-nova-estadia');
 
-  // Limpa opções do select para evitar duplicação
   function limparSelectPlaca() {
     placaSelect.innerHTML = '<option value="">Selecione uma placa</option>';
   }
 
-  // Formata data para input datetime-local (YYYY-MM-DDTHH:mm)
   function formatDateForInput(dateString) {
     if (!dateString) return '';
     const date = new Date(dateString);
@@ -31,19 +29,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     return `${year}-${month}-${day}T${hours}:${minutes}`;
   }
 
-  // Carregar veículos e estadias
   async function carregarVeiculosEEstadias() {
     try {
       limparSelectPlaca();
 
-      // Carregar veículos cadastrados
       const resVeiculos = await fetch('https://estacionamento-joaoapii2025.vercel.app/veiculos');
       if (!resVeiculos.ok) throw new Error('Erro ao carregar veículos');
       const veiculos = await resVeiculos.json();
 
       cadastradosList.innerHTML = '';
       veiculos.forEach(veiculo => {
-        // Exibir veículos cadastrados
         const veiculoCard = document.createElement('article');
         veiculoCard.classList.add('veiculo-card');
         veiculoCard.innerHTML = `
@@ -53,14 +48,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         `;
         cadastradosList.appendChild(veiculoCard);
 
-        // Adicionar opção no select da nova estadia
         const option = document.createElement('option');
         option.value = veiculo.placa;
         option.textContent = veiculo.placa;
         placaSelect.appendChild(option);
       });
 
-      // Carregar estadias
       const resEstadias = await fetch('https://estacionamento-joaoapii2025.vercel.app/estadias');
       if (!resEstadias.ok) throw new Error('Erro ao carregar estadias');
       const estadias = await resEstadias.json();
@@ -91,7 +84,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         estadiasList.appendChild(card);
 
-        // Evento para abrir modal de edição
         card.querySelector('.edit-button').addEventListener('click', () => abrirModalEdicao(estadia));
       });
     } catch (error) {
@@ -101,10 +93,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  // Abrir modal de edição e preencher campos
   function abrirModalEdicao(estadia) {
     placaDisplay.textContent = estadia.placa;
-    // Acessa o input hidden para id (crie esse input no seu form se ainda não tiver)
     editForm.querySelector('input[name="id"]').value = estadia.id;
     editForm['edit-entrada'].value = formatDateForInput(estadia.entrada);
     editForm['edit-saida'].value = estadia.saida ? formatDateForInput(estadia.saida) : '';
@@ -113,7 +103,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     modalEditarEstadia.classList.remove('hidden');
   }
 
-  // Fechar modais
   fecharEditarEstadia.addEventListener('click', () => {
     modalEditarEstadia.classList.add('hidden');
   });
@@ -127,108 +116,131 @@ document.addEventListener('DOMContentLoaded', async () => {
     modalNovaEstadia.classList.remove('hidden');
   });
 
-  // Submeter formulário de nova estadia
   novaEstadiaForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
+  event.preventDefault();
 
-    const placa = novaEstadiaForm.placa.value;
-    const entrada = novaEstadiaForm.entrada.value;
-    const valorHora = parseFloat(novaEstadiaForm.valorHora.value);
+  const placa = novaEstadiaForm.placa.value;
+  const entradaRaw = novaEstadiaForm.entrada.value;
+  const valorHora = parseFloat(novaEstadiaForm.valorHora.value);
 
-    if (!placa) {
-      alert('Selecione uma placa.');
-      return;
-    }
+  if (!placa) {
+    alert('Selecione uma placa.');
+    return;
+  }
 
-    if (!entrada || isNaN(valorHora)) {
-      alert('Preencha todos os campos corretamente.');
-      return;
-    }
+  if (!entradaRaw || isNaN(valorHora)) {
+    alert('Preencha todos os campos corretamente.');
+    return;
+  }
 
+  const entrada = new Date(entradaRaw).toISOString();
+
+  try {
+    const res = await fetch('https://estacionamento-joaoapii2025.vercel.app/estadias', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        placa,
+        entrada,
+        valorHora,
+        valorTotal: 0
+      })
+    });
+
+    let errData = {};
     try {
-      const res = await fetch('https://estacionamento-joaoapii2025.vercel.app/estadias', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          placa,
-          entrada,
-          valorHora,
-          valorTotal: 0
-        })
-      });
+      errData = await res.json();
+    } catch (_) {}
 
-      const errData = await res.json();
-
-      if (!res.ok) {
-        console.error('Erro ao cadastrar estadia:', errData);
-        throw new Error(errData.message || 'Erro ao cadastrar estadia');
-      }
-
-      alert('Estadia cadastrada com sucesso!');
-      modalNovaEstadia.classList.add('hidden');
-      carregarVeiculosEEstadias();
-    } catch (error) {
-      alert('Erro: ' + error.message);
-      console.error(error);
-    }
-  });
-
-  // Submeter formulário de edição de estadia
-  editForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
-
-    const id = editForm.querySelector('input[name="id"]').value;
-    const entrada = editForm['edit-entrada'].value;
-    const saida = editForm['edit-saida'].value;
-    const valorHora = parseFloat(editForm['edit-valorHora'].value);
-
-    if (!entrada || isNaN(valorHora)) {
-      alert('Preencha todos os campos corretamente.');
+    if (!res.ok) {
+      console.error('Erro ao cadastrar estadia:', errData);
+      alert(errData.erro || errData.message || 'Erro ao cadastrar estadia');
       return;
     }
 
-    let valorTotal = 0;
-    if (saida) {
-      const entradaTime = new Date(entrada).getTime();
-      const saidaTime = new Date(saida).getTime();
+    alert('Estadia cadastrada com sucesso!');
+    modalNovaEstadia.classList.add('hidden');
+    carregarVeiculosEEstadias();
 
-      if (saidaTime < entradaTime) {
-        alert('A saída não pode ser antes da entrada');
-        return;
-      }
+  } catch (error) {
+    alert('Erro: ' + error.message);
+    console.error(error);
+  }
+});
 
-      const diffHoras = (saidaTime - entradaTime) / (1000 * 60 * 60);
-      valorTotal = diffHoras * valorHora;
+
+ editForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+
+  const id = editForm.querySelector('input[name="id"]').value;
+  const entradaRaw = editForm['edit-entrada'].value;
+  const saidaRaw = editForm['edit-saida'].value;
+  const valorHora = parseFloat(editForm['edit-valorHora'].value);
+
+  if (!entradaRaw || isNaN(valorHora)) {
+    alert('Preencha todos os campos corretamente.');
+    return;
+  }
+
+  const entradaDate = new Date(entradaRaw);
+  if (isNaN(entradaDate)) {
+    alert('Data de entrada inválida.');
+    return;
+  }
+  const entrada = entradaDate.toISOString();
+
+  let saida = null;
+  if (saidaRaw) {
+    const saidaDate = new Date(saidaRaw);
+    if (isNaN(saidaDate)) {
+      alert('Data de saída inválida.');
+      return;
     }
+    saida = saidaDate.toISOString();
 
+    if (saidaDate < entradaDate) {
+      alert('A saída não pode ser antes da entrada');
+      return;
+    }
+  }
+
+  let valorTotal = 0;
+  if (saida) {
+    const diffHoras = (new Date(saida).getTime() - new Date(entrada).getTime()) / (1000 * 60 * 60);
+    valorTotal = diffHoras * valorHora;
+  }
+
+  try {
+    const res = await fetch(`https://estacionamento-joaoapii2025.vercel.app/estadias/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        entrada,
+        saida,
+        valorHora,
+        valorTotal
+      })
+    });
+
+    let errData = {};
     try {
-      const res = await fetch(`https://estacionamento-joaoapii2025.vercel.app/estadias/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          entrada,
-          saida: saida || null,
-          valorHora,
-          valorTotal
-        })
-      });
+      errData = await res.json();
+    } catch (_) {}
 
-      const errData = await res.json();
-
-      if (!res.ok) {
-        console.error('Erro ao editar estadia:', errData);
-        throw new Error(errData.message || 'Erro ao editar estadia');
-      }
-
-      alert('Estadia editada com sucesso!');
-      modalEditarEstadia.classList.add('hidden');
-      carregarVeiculosEEstadias();
-    } catch (error) {
-      alert('Erro: ' + error.message);
-      console.error(error);
+    if (!res.ok) {
+      console.error('Erro ao editar estadia:', errData);
+      throw new Error(errData.message || 'Erro ao editar estadia');
     }
-  });
 
-  // Inicializa carregando dados
+    alert('Estadia editada com sucesso!');
+    modalEditarEstadia.classList.add('hidden');
+    carregarVeiculosEEstadias();
+  } catch (error) {
+    alert('Erro: ' + error.message);
+    console.error(error);
+  }
+});
+
+
   carregarVeiculosEEstadias();
 });

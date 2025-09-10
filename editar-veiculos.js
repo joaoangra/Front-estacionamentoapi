@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const anoInput = document.getElementById('ano');
   const telefoneInput = document.getElementById('telefone');
 
-  // Função para buscar veículos cadastrados
   async function fetchVehicles() {
     try {
       const res = await fetch('https://estacionamento-joaoapii2025.vercel.app/veiculos');
@@ -25,7 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Exibir os veículos na tela (renderiza os cards)
   function renderVehicleCards(vehicles) {
     vehicleList.innerHTML = '';
     vehicles.forEach(vehicle => {
@@ -39,87 +37,73 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
       vehicleList.appendChild(card);
 
-      // Adiciona o evento de clique no botão de editar
       const editButton = card.querySelector('.edit-button');
       editButton.addEventListener('click', () => openEditModal(vehicle));
     });
   }
 
-  // Função para abrir o modal de edição
   function openEditModal(vehicle) {
     placaInput.value = vehicle.placa;
-    placaInput.disabled = true; // Desabilita o campo de placa
+    placaInput.disabled = true;
 
     tipoInput.value = vehicle.tipo;
     proprietarioInput.value = vehicle.proprietario;
     modeloInput.value = vehicle.modelo;
     marcaInput.value = vehicle.marca;
-    corInput.value = vehicle.cor || '';  // Garantir que cor seja vazia se não existir
-    anoInput.value = vehicle.ano || '';  // Garantir que ano seja vazio se não existir
+    corInput.value = vehicle.cor || '';
+    anoInput.value = vehicle.ano || '';
     telefoneInput.value = vehicle.telefone;
 
-    modal.classList.add('show'); // Mostra o modal
-    modal.style.visibility = 'visible'; // Torna o modal visível
+    modal.classList.add('show');
+    modal.style.visibility = 'visible';
   }
 
-  // Fechar o modal
   closeModalBtn.addEventListener('click', () => {
-    modal.classList.remove('show'); // Esconde o modal
-    modal.style.visibility = 'hidden'; // Esconde o modal
+    modal.classList.remove('show');
+    modal.style.visibility = 'hidden';
   });
 
-  // Enviar o formulário de edição (atualizar veículo)
   editForm.addEventListener('submit', async (event) => {
-    event.preventDefault(); // Impede o envio padrão do formulário
+    event.preventDefault();
 
-    const placa = placaInput.value; // A placa é a chave primária
+    const placa = placaInput.value;
     const tipo = tipoInput.value;
     const proprietario = proprietarioInput.value;
     const modelo = modeloInput.value;
     const marca = marcaInput.value;
     const cor = corInput.value;
-    const ano = parseInt(anoInput.value, 10); // Garantir que ano seja um número
+    const ano = parseInt(anoInput.value, 10);
     const telefone = telefoneInput.value;
 
-    // Criação do objeto de dados atualizados
     const updatedVehicle = { tipo, proprietario, modelo, marca, cor, ano, telefone };
 
     try {
-      console.log('Enviando requisição PATCH para:', `https://estacionamento-joaoapii2025.vercel.app/veiculos/${placa}`);
-      console.log('Dados enviados:', updatedVehicle);
-
-      // Verificação de dados antes de enviar
       if (!placa || placa.length < 7) {
         throw new Error('A placa fornecida é inválida.');
       }
 
-      // Utilizando a placa diretamente na URL da requisição PATCH
       const res = await fetch(`https://estacionamento-joaoapii2025.vercel.app/veiculos/${placa}`, {
-        method: 'PATCH', // Método HTTP para atualização parcial
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(updatedVehicle)
       });
 
-      // Verificar a resposta da API
       if (!res.ok) {
-        const errorData = await res.json(); // Captura a resposta de erro
+        const errorData = await res.json();
         console.error('Erro ao atualizar o veículo:', errorData);
         throw new Error(`Erro ao atualizar o veículo. Status: ${res.status} - ${JSON.stringify(errorData)}`);
       }
 
-      const data = await res.json(); // Resposta de sucesso
+      const data = await res.json();
       console.log('Resposta da API:', data);
 
-      // Mensagem de sucesso
       alert('Veículo atualizado com sucesso!');
 
-      // Fecha o modal
       modal.classList.remove('show');
       modal.style.visibility = 'hidden';
 
-      // Recarrega a lista de veículos
       fetchVehicles();
     } catch (error) {
       console.error('Erro:', error);
@@ -127,6 +111,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Carregar veículos ao iniciar a página
   fetchVehicles();
 });
